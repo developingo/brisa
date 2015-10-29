@@ -25,6 +25,9 @@ if __name__ == '__main__':
 	for linea in archivo:
 		data        = list(filter(lambda x:x, linea.strip().split(' ')))
 
+		if int(data[3]) > 8:
+			continue
+
 		intensidad  = data[7]
 		direccion   = data[5]
 		minutos     = data[4]
