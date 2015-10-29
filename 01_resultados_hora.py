@@ -5,14 +5,14 @@ import sys
 
 if __name__ == '__main__':
 	if len(sys.argv)==1:
-		print "Falta la estacion!"
+		print("Falta la estacion!")
 		exit(1)
-	
+
 	estacion = sys.argv[1]
 
 	# Archivo de entrada
 	archivo          = open('%s/%s.txt'%(estacion,estacion))
-	
+
 	# Archivos de resultados
 	archivo_res_comp = open('%s/01_resultados_hora_comp.txt'%(estacion), 'w')
 	archivo_res      = open('%s/01_resultados_hora.txt'%(estacion), 'w')
@@ -23,10 +23,7 @@ if __name__ == '__main__':
 	fecha       = []
 
 	for linea in archivo:
-		data        = filter(lambda x:x, linea.strip().split(' '))
-
-		if int(data[3]) > 8:
-			continue
+		data        = list(filter(lambda x:x, linea.strip().split(' ')))
 
 		intensidad  = data[7]
 		direccion   = data[5]
@@ -54,18 +51,18 @@ if __name__ == '__main__':
 					intensidad_prom = sqrt(promedio_u**2 + promedio_v**2)
 				else:
 					intensidad_prom = 0
-					direccion_prom  = 0 
+					direccion_prom  = 0
 
 				# Archivo con las componentes promedio
 				archivo_res_comp.write('\t'.join(fecha + [hora_actual] + [str(promedio_u), str(promedio_v)]) + '\n')
 				# Archivo con los promedios por hora
 				archivo_res.write('\t'.join(fecha + [hora_actual] + [str(direccion_prom), str(intensidad_prom)]) + '\n')
 			else:
-				# Si no hay suficientes valores entonces es hora de escribir algunos NaNs
-				archivo_res_comp.write('\t'.join(data[:3] + [hora_actual] + ['NaN', 'NaN']) + '\n')
-				archivo_res.write('\t'.join(data[:3] + [hora_actual] + ['NaN', 'NaN']) + '\n')
+				# Si no hay suficientes valores entonces es hora de escribir algunos NaN
+				archivo_res_comp.write('\t'.join(fecha + [hora_actual] + ['NaN', 'NaN']) + '\n')
+				archivo_res.write('\t'.join(fecha + [hora_actual] + ['NaN', 'NaN']) + '\n')
 
-			if data[3] == '9':
+			if data[3] == '0':
 				fecha = []
 
 			hora_actual = data[3]
