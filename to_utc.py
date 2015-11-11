@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 import csv
 from datetime import datetime
 from pytz import timezone
 import json
 
-archivo_amanecer = open('data/sunrise_sunset.csv', 'r')
+archivo_amanecer = open('sunrise_sunset.csv', 'r')
 
 amanecer_csv = csv.reader(archivo_amanecer)
 
@@ -35,4 +36,4 @@ for fila in amanecer_csv:
         'sunset': hora_atardecer.astimezone(utc).strftime('%Y-%m-%d %H:%M:%S%z'),
     }
 
-json.dump(utc_data, open('data/sunrise.json', 'w'))
+json.dump(utc_data, open('sunrise_utc.json', 'w'))

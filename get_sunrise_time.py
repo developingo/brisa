@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pyquery.pyquery import PyQuery
 from itertools import starmap
 import csv
@@ -30,7 +31,7 @@ if __name__ == '__main__':
 
             print('finished %d-%d'%(year, month))
 
-    with open('data/sunrise_sunset.csv', 'w') as sunfile:
+    with open('sunrise_sunset.csv', 'w') as sunfile:
         writer = csv.writer(sunfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 
         writer.writerows(res)

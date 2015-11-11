@@ -1,4 +1,5 @@
-# Calcula el la normal a la playa
+#!/usr/bin/env python3
+# Calcula la normal a la playa
 import matplotlib.pyplot as plt
 import numpy as np
 from math import atan, acos, pi, sin, cos
@@ -128,7 +129,7 @@ def onpick(event):
 
 if __name__ == '__main__':
     if len(sys.argv)==1:
-        print "Falta la estacion!"
+        print("Falta la estacion!")
         exit(1)
     
     estacion = sys.argv[1]

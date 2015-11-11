@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Calculo del promedio por hora
 from math import sin, cos, sqrt, atan, pi
