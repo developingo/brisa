@@ -33,14 +33,6 @@ if __name__ == '__main__':
 	amplitud = float(archivo_angulos.readline())
 	estacion_lon = float(archivo_coords.readline())
 
-	anios = {
-		2008: [[] for m in range(0, 12)],
-		2009: [[] for m in range(0, 12)],
-		2010: [[] for m in range(0, 12)],
-		2011: [[] for m in range(0, 12)],
-		2012: [[] for m in range(0, 12)],
-	}
-
 	citla_csv = csv.reader(archivo_datos)
 
 	veracruz_lon = -96.15333333333334
@@ -57,7 +49,14 @@ if __name__ == '__main__':
 
 	print("Calculos iniciales terminados...")
 	print("Procesando datos...")
-	anio_actual = ''
+
+	datos_hoy  = []
+	dia_actual = {
+		'noD': 0,
+		'tierramar': 0,
+		'martierra': 0,
+		'C2': False,
+	}
 
 	for fila in citla_csv:
 		anio   = int(fila[0])
@@ -74,46 +73,36 @@ if __name__ == '__main__':
 		amanecer  = datetime.strptime(sunrise_data[fecha]['sunrise'], '%Y-%m-%d %H:%M:%S%z') + offset
 		atardecer = datetime.strptime(sunrise_data[fecha]['sunset'], '%Y-%m-%d %H:%M:%S%z') + offset
 
-		if anio_actual != anio:
-			anio_actual = anio
-			print()
-			print(anio_actual)
+		if angulo != -999.90:
+			# Detectar si es de día
+			if hora_actual >= amanecer+dos and hora_actual < atardecer+dos:
+				# es de día
+				if not dia_actual['C2']:
+					if es_mar_tierra(normal, amplitud, angulo):
+						dia_actual['martierra'] += 1
 
-		if hora == 0 and minuto == 0:
-			print('.', end='')
-			sys.stdout.flush()
-			anios[anio][mes].append({
+						if dia_actual['martierra'] >= 12:
+							dia_actual['C2'] = True
+					else:
+						dia_actual['martierra'] = 0
+			else:
+				# madrugada y noche
+				dia_actual['noD'] += 1
+				if es_tierra_mar(normal, amplitud, angulo):
+					dia_actual['tierramar'] += 1
+
+		if hora == 23 and minuto == 50:
+			# final del día, revisamos si hubo brisa hoy
+
+			mensaje = 'no'
+			if dia_actual['noD'] > 0 and dia_actual['tierramar']/dia_actual['noD'] > .6 and dia_actual['C2']:
+				mensaje = 'SI<---'
+
+			print(anio, mes+1, dia+1, mensaje, sep='\t')
+
+			dia_actual = {
 				'noD': 0,
 				'tierramar': 0,
 				'martierra': 0,
 				'C2': False,
-			})
-
-		if angulo == -999.90:
-			continue
-
-		# Detectar si es de día
-		if hora_actual >= amanecer+dos and hora_actual < atardecer+dos:
-			# es de día
-			if not anios[anio][mes][dia]['C2']:
-				if es_mar_tierra(normal, amplitud, angulo):
-					anios[anio][mes][dia]['martierra'] += 1
-
-					if anios[anio][mes][dia]['martierra'] >= 12:
-						anios[anio][mes][dia]['C2'] = True
-				else:
-					anios[anio][mes][dia]['martierra'] = 0
-		else:
-			# madrugada y noche
-			anios[anio][mes][dia]['noD'] += 1
-			if es_tierra_mar(normal, amplitud, angulo):
-				anios[anio][mes][dia]['tierramar'] += 1
-
-	for anio in range(2008, 2013):
-		for num_mes, mes in enumerate(anios[anio]):
-			for num_dia, dia in enumerate(mes):
-				mensaje = 'no'
-				if dia['noD'] > 0 and dia['tierramar']/dia['noD'] > .6 and dia['C2']:
-					mensaje = 'SI<---'
-
-				print(anio, num_mes+1, num_dia+1, mensaje, sep='\t')
+			}
