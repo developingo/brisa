@@ -80,7 +80,7 @@ if __name__ == '__main__':
 			print(anio_actual)
 
 		if hora == 0 and minuto == 0:
-			sys.stdout.write('.')
+			print('.', end='')
 			sys.stdout.flush()
 			anios[anio][mes].append({
 				'noD': 0,
