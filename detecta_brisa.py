@@ -21,9 +21,13 @@ if __name__ == '__main__':
 
 	estacion = sys.argv[1]
 
-	archivo_datos = open('%s/%s.csv'%(estacion, estacion))
-	archivo_angulos = open('%s/angle.txt'%estacion)
-	archivo_coords = open('%s/coords.txt'%estacion)
+	try:
+		archivo_datos = open('%s/%s.csv'%(estacion, estacion))
+		archivo_angulos = open('%s/angle.txt'%estacion)
+		archivo_coords = open('%s/coords.txt'%estacion)
+	except FileNotFoundError as error:
+		print("No existe el archivo %s"%error.filename)
+		exit()
 
 	normal = float(archivo_angulos.readline())
 	amplitud = float(archivo_angulos.readline())
