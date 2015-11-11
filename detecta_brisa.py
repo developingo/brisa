@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 import csv
 import json
+import sys
 from pytz import timezone
 from datetime import datetime, timedelta
 
@@ -13,9 +15,15 @@ def es_mar_tierra(normal, amplitud, angulo):
 	return es_tierra_mar((normal+180)%360, amplitud, angulo)
 
 if __name__ == '__main__':
-	archivo_datos = open('data/citla.csv')
-	archivo_angulos = open('data/angle.txt')
-	archivo_coords = open('data/coords.txt')
+	if len(sys.argv)==1:
+		print("Falta la estacion!")
+		exit(1)
+
+	estacion = sys.argv[1]
+
+	archivo_datos = open('%s/%s.csv'%(estacion, estacion))
+	archivo_angulos = open('%s/angle.txt'%estacion)
+	archivo_coords = open('%s/coords.txt'%estacion)
 
 	normal = float(archivo_angulos.readline())
 	amplitud = float(archivo_angulos.readline())
@@ -41,7 +49,11 @@ if __name__ == '__main__':
 	dos = timedelta(hours=2)
 	tz  = timezone('America/Mexico_City')
 
-	sunrise_data = json.load(open('data/sunrise.json'))
+	sunrise_data = json.load(open('sunrise_utc.json'))
+
+	print("Calculos iniciales terminados...")
+	print("Procesando datos...")
+	anio_actual = ''
 
 	for fila in citla_csv:
 		anio   = int(fila[0])
@@ -58,7 +70,14 @@ if __name__ == '__main__':
 		amanecer  = datetime.strptime(sunrise_data[fecha]['sunrise'], '%Y-%m-%d %H:%M:%S%z') + offset
 		atardecer = datetime.strptime(sunrise_data[fecha]['sunset'], '%Y-%m-%d %H:%M:%S%z') + offset
 
+		if anio_actual != anio:
+			anio_actual = anio
+			print()
+			print(anio_actual)
+
 		if hora == 0 and minuto == 0:
+			sys.stdout.write('.')
+			sys.stdout.flush()
 			anios[anio][mes].append({
 				'noD': 0,
 				'tierramar': 0,

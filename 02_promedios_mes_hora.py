@@ -6,9 +6,8 @@ if __name__ == '__main__':
 	if len(sys.argv)==1:
 		print "Falta la estacion!"
 		exit(1)
-	
-	estacion = sys.argv[1]
 
+	estacion = sys.argv[1]
 
 	archivo_comp = open('%s/01_resultados_hora_comp.txt'%(estacion), 'r')
 	resultados   = open('%s/02_promedios_mes_hora.txt'%(estacion), 'w')
