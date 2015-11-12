@@ -65,4 +65,4 @@ if __name__ == '__main__':
             direccion_prom  = (180/pi*atan(promedio_u/promedio_v))%360
             intensidad_prom = sqrt(promedio_u**2 + promedio_v**2)
 
-            prom_csv.writerow([intensidad_prom])
+            prom_csv.writerow([direccion_prom,intensidad_prom])
