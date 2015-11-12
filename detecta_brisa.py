@@ -15,6 +15,21 @@ def es_tierra_mar(normal, amplitud, angulo):
 def es_mar_tierra(normal, amplitud, angulo):
 	return es_tierra_mar((normal+180)%360, amplitud, angulo)
 
+meses = [
+	'enero',
+	'febrero',
+	'marzo',
+	'abril',
+	'mayo',
+	'junio',
+	'julio',
+	'agosto',
+	'septiembre',
+	'octubre',
+	'noviembre',
+	'diciembre',
+]
+
 if __name__ == '__main__':
 	if len(sys.argv)==1:
 		print("Falta la estacion!")
@@ -61,7 +76,13 @@ if __name__ == '__main__':
 		'C2': False,
 	}
 
-	mes_csv = None
+	if not os.path.isdir('%s/meses'%estacion):
+		os.mkdir('%s/meses'%estacion)
+
+	meses_csv = [
+		csv.writer(open('%s/meses/%02d_%s.csv'%(estacion, mes, meses[mes-1]), 'w'))
+		for mes in range(1, 13)
+	]
 
 	for fila in citla_csv:
 		anio   = int(fila[0])
@@ -103,11 +124,6 @@ if __name__ == '__main__':
 		if dia == 1 and hora == 0 and minuto == 0:
 			# Inicio del mes
 
-			if not os.path.isdir('%s/meses'%estacion):
-				os.mkdir('%s/meses'%estacion)
-
-			mes_csv = csv.writer(open('%s/meses/%d-%d.csv'%(estacion, anio, mes), 'w'))
-
 			print(mes, end='')
 
 		if hora == 23 and minuto == 50:
@@ -119,7 +135,7 @@ if __name__ == '__main__':
 			if dia_actual['noD'] > 0 and dia_actual['tierramar']/dia_actual['noD'] > .6 and dia_actual['C2']:
 				mensaje = 1
 
-				mes_csv.writerows(datos_hoy)
+				meses_csv[mes - 1].writerows(datos_hoy)
 
 			datos_hoy = []
 
