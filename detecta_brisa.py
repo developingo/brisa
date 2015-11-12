@@ -2,6 +2,7 @@
 import csv
 import json
 import sys
+import os
 from pytz import timezone
 from datetime import datetime, timedelta
 
@@ -60,6 +61,8 @@ if __name__ == '__main__':
 		'C2': False,
 	}
 
+	mes_csv = None
+
 	for fila in citla_csv:
 		anio   = int(fila[0])
 		mes    = int(fila[1])
@@ -97,6 +100,16 @@ if __name__ == '__main__':
 				if es_tierra_mar(normal, amplitud, angulo):
 					dia_actual['tierramar'] += 1
 
+		if dia == 1 and hora == 0 and minuto == 0:
+			# Inicio del mes
+
+			if not os.path.isdir('%s/meses'%estacion):
+				os.mkdir('%s/meses'%estacion)
+
+			mes_csv = csv.writer(open('%s/meses/%d-%d.csv'%(estacion, anio, mes), 'w'))
+
+			print(mes, end='')
+
 		if hora == 23 and minuto == 50:
 			# final del día, revisamos si hubo brisa hoy
 			print('.', end='')
@@ -105,6 +118,10 @@ if __name__ == '__main__':
 			mensaje = 0
 			if dia_actual['noD'] > 0 and dia_actual['tierramar']/dia_actual['noD'] > .6 and dia_actual['C2']:
 				mensaje = 1
+
+				mes_csv.writerows(datos_hoy)
+
+			datos_hoy = []
 
 			result_csv.writerow([anio, mes, dia, mensaje])
 
