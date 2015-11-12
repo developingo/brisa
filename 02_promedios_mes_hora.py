@@ -43,4 +43,3 @@ if __name__ == '__main__':
 				resultados.write('\t'.join(map(str, [num_mes+1, num_hora, intensidad_prom, direccion_prom])) + '\n')
 			else:
 				resultados.write('\t'.join(map(str, [num_mes+1, num_hora, 'NaN', 'NaN'])) + '\n')
-
