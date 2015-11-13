@@ -39,13 +39,13 @@ if __name__ == '__main__':
 
         radius = []
 
+        ax = plt.subplot(2, 6, indice+1, projection='polar')
+
         for row in prom_csv:
             radius.append(float(row[1]))
 
         theta = [i/24*2*pi for i in range(24)] + [0]
         radius += radius[:1]
-
-        ax = plt.subplot(2, 6, indice+1, projection='polar')
 
         ax.set_theta_zero_location('N')
         ax.set_theta_direction(-1)
@@ -53,7 +53,8 @@ if __name__ == '__main__':
         ax.set_rgrids(rlabel, rlabel)
         ax.autoscale(False)
 
-        ax.arrow(0, 0, 0, 2)
+        for i, r in enumerate(radius):
+            ax.arrow(i/24*2*pi, r, 0, 1)
 
         ax.plot(theta, radius)
         ax.set_title(mes)
