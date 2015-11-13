@@ -25,14 +25,14 @@ labels = [i*3 for i in range(8)]
 
 rlabel = [(i+1)*2 for i in range(6)]
 
+theta = [i/24*2*pi for i in range(24)] + [0]
+
 if __name__ == '__main__':
     if len(sys.argv)==1:
         print("Falta la estacion!")
         exit(1)
 
     estacion = sys.argv[1]
-
-    fig, axes = plt.subplots(2, 6)
 
     for indice, mes in enumerate(meses):
         prom_csv = csv.reader(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes)))
@@ -44,7 +44,6 @@ if __name__ == '__main__':
         for row in prom_csv:
             radius.append(float(row[1]))
 
-        theta = [i/24*2*pi for i in range(24)] + [0]
         radius += radius[:1]
 
         ax.set_theta_zero_location('N')
@@ -54,7 +53,7 @@ if __name__ == '__main__':
         ax.autoscale(False)
 
         for i, r in enumerate(radius):
-            ax.arrow(i/24*2*pi, r, 0, 1)
+            ax.arrow(i/24*2*pi, r, 0, 1, head_width=.100, head_length=.4)
 
         ax.plot(theta, radius)
         ax.set_title(mes)
