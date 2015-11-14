@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from math import pi
+from math import pi, sqrt, cos, sin, asin
 import matplotlib.pyplot as plt
 import csv
 import sys
@@ -38,11 +38,13 @@ if __name__ == '__main__':
         prom_csv = csv.reader(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes)))
 
         radius = []
+        gammas = []
 
         ax = plt.subplot(2, 6, indice+1, projection='polar')
 
         for row in prom_csv:
             radius.append(float(row[1]))
+            gammas.append(float(row[0]) / 360 * 2 * pi)
 
         radius += radius[:1]
 
@@ -52,8 +54,13 @@ if __name__ == '__main__':
         ax.set_rgrids(rlabel, rlabel)
         ax.autoscale(False)
 
-        for i, r in enumerate(radius):
-            ax.arrow(i/24*2*pi, r, 0, 1, head_width=.100, head_length=.4)
+        for i, (γ, r) in enumerate(zip(gammas, radius)):
+            θ = i/24*2*pi
+            β = pi - γ + θ
+            c = sqrt(r**2 + 1 - 2*r*cos(β))
+            Δr = c - r
+            Δθ = asin(sin(β)/c)
+            ax.arrow(θ, r, Δθ, Δr, head_width=.05, head_length=.04)
 
         ax.plot(theta, radius)
         ax.set_title(mes)
