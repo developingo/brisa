@@ -59,10 +59,14 @@ if __name__ == '__main__':
                 horas[hora]['n'] += 1
 
         for hora, data in enumerate(horas):
-            promedio_u = data['u'] / data['n']
-            promedio_v = data['v'] / data['n']
+            if data['n'] > 0:
+                promedio_u = data['u'] / data['n']
+                promedio_v = data['v'] / data['n']
 
-            direccion_prom  = (180/pi*atan(promedio_u/promedio_v))%360
-            intensidad_prom = sqrt(promedio_u**2 + promedio_v**2)
+                direccion_prom  = (180/pi*atan(promedio_u/promedio_v))%360
+                intensidad_prom = sqrt(promedio_u**2 + promedio_v**2)
+            else:
+                direccion_prom  = 0
+                intensidad_prom = 0
 
             prom_csv.writerow([direccion_prom,intensidad_prom])

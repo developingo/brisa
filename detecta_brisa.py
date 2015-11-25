@@ -100,7 +100,7 @@ if __name__ == '__main__':
         amanecer  = datetime.strptime(sunrise_data[fecha]['sunrise'], '%Y-%m-%d %H:%M:%S%z') + offset
         atardecer = datetime.strptime(sunrise_data[fecha]['sunset'], '%Y-%m-%d %H:%M:%S%z') + offset
 
-        if angulo != -999.90:
+        if angulo != -999.90 and intensidad != -999.90:
             datos_hoy.append([
                 anio, mes, dia, hora, minuto, angulo, intensidad
             ])
