@@ -4,6 +4,19 @@ import matplotlib.pyplot as plt
 import csv
 import sys
 
+estaciones = {
+    'btordo'    : 'Barra de tordo',
+    'citla'     : 'Citlaltepec',
+    'cang'      : 'Cangrejera',
+    'sfernando' : 'San Fernando',
+    'rio'       : 'Río lagartos',
+    'paraiso'   : 'Paraíso',
+    'dzim'      : 'Dzilam',
+    'celestm'   : 'Celestun',
+    'cdcarmn'   : 'Ciudad del Carmen',
+    'campe'     : 'Campeche',
+}
+
 meses = [
     'enero',
     'febrero',
@@ -65,6 +78,6 @@ if __name__ == '__main__':
         ax.plot(theta, radius)
         ax.set_title(mes)
 
-    plt.suptitle(estacion)
+    plt.suptitle(estaciones[estacion])
 
     plt.show()
