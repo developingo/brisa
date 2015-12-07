@@ -48,7 +48,12 @@ if __name__ == '__main__':
     estacion = sys.argv[1]
 
     for indice, mes in enumerate(meses):
-        prom_csv = csv.reader(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes)))
+        try:
+            prom_csv = csv.reader(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes)))
+        except FileNotFoundError as e:
+            sys.stderr.write('No existe el archivo %s\n'%e.filename)
+            sys.stderr.write('Quizá olvidaste ejecutar caracteriza_briza.py\n')
+            exit(1)
 
         radius = []
         gammas = []

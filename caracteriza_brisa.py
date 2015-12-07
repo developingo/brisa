@@ -33,8 +33,13 @@ if __name__ == '__main__':
         os.mkdir('%s/prom'%estacion)
 
     for indice, mes in enumerate(meses):
-        mes_csv  = csv.reader(open('%s/meses/%02d_%s.csv'%(estacion, indice+1, mes)))
-        prom_csv = csv.writer(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes), 'w'))
+        try:
+            mes_csv  = csv.reader(open('%s/meses/%02d_%s.csv'%(estacion, indice+1, mes)))
+            prom_csv = csv.writer(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes), 'w'))
+        except FileNotFoundError as e:
+            sys.stderr.write('No existe el archivo %s\n'%e.filename)
+            sys.stderr.write('Quizá olvidaste ejecutar antes detecta_brisa.py\n')
+            exit(1)
 
         horas = [
             {
