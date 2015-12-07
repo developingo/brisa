@@ -1,30 +1,16 @@
 #!/usr/bin/env python3
+"""
+Toma los concentrados de cada mes y calcula un día promedio de brisa de ese mes
+en la carpeta prom
+"""
 import sys
 import csv
 import os
 from math import sin, cos, pi, atan, sqrt
-
-meses = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
-]
+from util import obten_estacion, err, meses
 
 if __name__ == '__main__':
-    if len(sys.argv)==1:
-        print("Falta la estacion!")
-        exit(1)
-
-    estacion = sys.argv[1]
+    estacion = obten_estacion()
 
     if not os.path.isdir('%s/meses'%estacion):
         os.mkdir('%s/meses'%estacion)
@@ -37,8 +23,8 @@ if __name__ == '__main__':
             mes_csv  = csv.reader(open('%s/meses/%02d_%s.csv'%(estacion, indice+1, mes)))
             prom_csv = csv.writer(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes), 'w'))
         except FileNotFoundError as e:
-            sys.stderr.write('No existe el archivo %s\n'%e.filename)
-            sys.stderr.write('Quizá olvidaste ejecutar antes detecta_brisa.py\n')
+            err('No existe el archivo %s'%e.filename)
+            err('Quizá olvidaste ejecutar antes detecta_brisa.py')
             exit(1)
 
         horas = [

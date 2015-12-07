@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+"""
+Detecta los días de brisa en archivos de registro de viento (velocidad y
+dirección), luego crear archivos concentrados con los datos de los días de brisa
+de cada mes, de todos los años.
+"""
 import csv
 import json
 import sys
 import os
 from pytz import timezone
 from datetime import datetime, timedelta
+from util import obten_estacion, meses
 
 def dd(alpha, beta):
     return (beta - alpha)%360
@@ -15,27 +21,8 @@ def es_tierra_mar(normal, amplitud, angulo):
 def es_mar_tierra(normal, amplitud, angulo):
     return es_tierra_mar((normal+180)%360, amplitud, angulo)
 
-meses = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
-]
-
 if __name__ == '__main__':
-    if len(sys.argv)==1:
-        print("Falta la estacion!")
-        exit(1)
-
-    estacion = sys.argv[1]
+    estacion = obten_estacion()
 
     try:
         archivo_datos = open('%s/%s.csv'%(estacion, estacion))
@@ -51,7 +38,7 @@ if __name__ == '__main__':
 
     result_csv = csv.writer(open('%s/result.csv'%estacion, 'w'))
 
-    citla_csv = csv.reader(archivo_datos)
+    datos_csv = csv.reader(archivo_datos)
 
     veracruz_lon = -96.15333333333334
     offset_hour = (veracruz_lon - estacion_lon)/360*24
@@ -84,7 +71,7 @@ if __name__ == '__main__':
         for mes in range(1, 13)
     ]
 
-    for fila in citla_csv:
+    for fila in datos_csv:
         anio   = int(fila[0])
         mes    = int(fila[1])
         dia    = int(fila[2])
@@ -128,8 +115,7 @@ if __name__ == '__main__':
 
         if hora == 23 and minuto == 50:
             # final del día, revisamos si hubo brisa hoy
-            print('.', end='')
-            sys.stdout.flush()
+            print('.', end='', flush=True)
 
             mensaje = 0
             if dia_actual['noD'] > 0 and dia_actual['tierramar']/dia_actual['noD'] > .6 and dia_actual['C2']:

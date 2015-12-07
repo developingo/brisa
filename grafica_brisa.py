@@ -1,38 +1,13 @@
 #!/usr/bin/env python3
+"""
+Toma los días promedio calculados por caracteriza_brisa.py y los grafica en
+coordenadas polares.
+"""
 from math import pi, sqrt, cos, sin, asin
+from util import obten_estacion, err, estaciones, meses, angles
 import matplotlib.pyplot as plt
 import csv
 import sys
-
-estaciones = {
-    'btordo'    : 'Barra de tordo',
-    'citla'     : 'Citlaltepec',
-    'cang'      : 'Cangrejera',
-    'sfernando' : 'San Fernando',
-    'rio'       : 'Río lagartos',
-    'paraiso'   : 'Paraíso',
-    'dzim'      : 'Dzilam',
-    'celestm'   : 'Celestun',
-    'cdcarmn'   : 'Ciudad del Carmen',
-    'campe'     : 'Campeche',
-}
-
-meses = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
-]
-
-angles = [i*45 for i in range(8)]
 
 labels = [i*3 for i in range(8)]
 
@@ -41,18 +16,14 @@ rlabel = [(i+1)*2 for i in range(6)]
 theta = [i/24*2*pi for i in range(24)] + [0]
 
 if __name__ == '__main__':
-    if len(sys.argv)==1:
-        print("Falta la estacion!")
-        exit(1)
-
-    estacion = sys.argv[1]
+    estacion = obten_estacion()
 
     for indice, mes in enumerate(meses):
         try:
             prom_csv = csv.reader(open('%s/prom/%02d_%s.csv'%(estacion, indice+1, mes)))
         except FileNotFoundError as e:
-            sys.stderr.write('No existe el archivo %s\n'%e.filename)
-            sys.stderr.write('Quizá olvidaste ejecutar caracteriza_briza.py\n')
+            err('No existe el archivo %s'%e.filename)
+            err('Quizá olvidaste ejecutar caracteriza_brisa.py')
             exit(1)
 
         radius = []
