@@ -16,9 +16,17 @@ def dd(alpha, beta):
     return (beta - alpha)%360
 
 def es_tierra_mar(normal, amplitud, angulo):
+    """
+    Detecta si el viento proviniente de `angulo` es ed tierra a mar dadas
+    la normal a la costa y la amplitud permitida
+    """
     return dd(normal, angulo) <= amplitud/2 or dd(angulo, normal) <= amplitud/2
 
 def es_mar_tierra(normal, amplitud, angulo):
+    """
+    Detecta si el viento proviniente de `angulo` es de mar a tierra dadas
+    la normal a la costa y la amplitud permitida
+    """
     return es_tierra_mar((normal+180)%360, amplitud, angulo)
 
 if __name__ == '__main__':
